@@ -139,8 +139,11 @@ model.add(Dense(22)) # 22 output neurons because there are 22 individual protein
 # Optimizer
 opt = Adam(learning_rate = 0.001)
 
+# Early stopping
+early_stopping = EarlyStopping(min_delta = 0.001, patience = 5, restore_best_weights = True)
+
 # Compile and train model
-model.compile(optimizer = opt, loss = SparseCategoricalCrossentropy(from_logits = True), metrics = ['accuracy'])
+model.compile(optimizer = opt, loss = SparseCategoricalCrossentropy(from_logits = True), metrics = ['accuracy']) # callbacks = [early_stopping]
 model.fit(trainx, trainy, epochs = 100)
 
 # Evaluate model
