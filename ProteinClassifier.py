@@ -1,11 +1,9 @@
 # Imports
 import tensorflow as tf
-from tensorflow.keras.layers import Dense, BatchNormalization, Dropout
+from tensorflow.keras.layers import Dense
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.callbacks import EarlyStopping
-from tensorflow.keras.losses import CategoricalCrossentropy
-from tensorflow.keras.metrics import CategoricalAccuracy
-from tensorflow.keras.metrics import AUC
+from tensorflow.keras.losses import SparseCategoricalCrossentropy
 from tensorflow.keras.optimizers import Adam
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -72,6 +70,7 @@ def generate_dataset(num_sets): # More codons --> more data
           x.append(codon) # Each set contains approximately 64 codons
     return x
 
+# Generate labels
 def transcription_and_translation(x):
     transcribed = []
     translated = []
@@ -92,7 +91,7 @@ def transcription_and_translation(x):
         translated.append(encoded_classes[translation_map[string]])
     return translated
 
-# Turn all inputs into codons with letter bases for interpretation purposes
+# Turn all inputs into codons with letter bases for interpretation purposes (unencode the dataset)
 def inputs_to_codons(input):
     transcribed_codons = []
     proteins = []
@@ -118,7 +117,7 @@ print("Testing Dataset Size:", len(testx))
 model = Sequential()
 
 # Input layer
-model.add(Dense(3, input_shape = [3])) # input_shape must be 3 since it is handling codons which have 3 bases
+model.add(Dense(3, input_shape = [3])) # input_shape must be 3 since the network is receiveing codons which have 3 bases
 
 # Hidden layers
 model.add(Dense(258, activation = "relu"))
@@ -141,7 +140,7 @@ model.add(Dense(22)) # 22 output neurons because there are 22 individual protein
 opt = Adam(learning_rate = 0.001)
 
 # Compile and train model
-model.compile(optimizer='adam', loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits = True), metrics=['accuracy'])
+model.compile(optimizer='adam', loss = SparseCategoricalCrossentropy(from_logits = True), metrics = ['accuracy'])
 model.fit(trainx, trainy, epochs = 10)
 
 # Evaluate model
@@ -172,7 +171,7 @@ print("\nCodon:", codon)
 prediction = model.predict(codon)
 print("Prediction Probabilities:")
 print(prediction) # Get array of model probability predictions
-prediction_index = np.argmax(prediction) # Get model's prediction (the class the model calculates to have the highest value)
+prediction_index = np.argmax(prediction) # Get model's prediction (the class the model calculates to have the highest probability of being the label)
 
 # View model's prediction compared to the actual values
-print("\nPrediction:", reversed_classes[prediction_index], "| Actual Label:", reversed_classes[label[0]])
+print("\nModel's Prediction:", reversed_classes[prediction_index], "| Actual Label:", reversed_classes[label[0]])
