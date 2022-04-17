@@ -140,8 +140,8 @@ model.add(Dense(22)) # 22 output neurons because there are 22 individual protein
 opt = Adam(learning_rate = 0.001)
 
 # Compile and train model
-model.compile(optimizer='adam', loss = SparseCategoricalCrossentropy(from_logits = True), metrics = ['accuracy'])
-model.fit(trainx, trainy, epochs = 10)
+model.compile(optimizer = opt, loss = SparseCategoricalCrossentropy(from_logits = True), metrics = ['accuracy'])
+model.fit(trainx, trainy, epochs = 100)
 
 # Evaluate model
 test_loss, test_acc = model.evaluate(np.array(testx), np.array(testy), verbose = 2)
@@ -160,7 +160,7 @@ print("\n\nTrain Labels (Proteins):", train_labels)
 print('\nTest Aacuracy:', test_acc)
 print("**************")
 
-# Predict
+# Using the model to predict proteins based on codons
 print("\n\nSAMPLE PREDICTION")
 print("=================")
 
