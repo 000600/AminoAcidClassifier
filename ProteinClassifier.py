@@ -53,8 +53,8 @@ for index in range(len(classes)):
 # Get reversed classes for prediction purposes
 reversed_classes = {v: k for k, v in encoded_classes.items()}
 
-# Generate data
-def generate_dataset(num_sets): # More codons --> more data
+# Generate inputs
+def generate_codon_inputs(num_sets): # More codons --> more data
     # Generate codons
     x = []
 
@@ -71,11 +71,11 @@ def generate_dataset(num_sets): # More codons --> more data
     return x
 
 # Generate labels
-def transcription_and_translation(x):
+def transcription_and_translation_labels(codon_list):
     transcribed = []
     translated = []
     # Transcribe codons
-    for codon in x:
+    for codon in codon_list:
         codon_holder = []
         for base in codon:
             new_base = transcription_map[base]
@@ -104,10 +104,10 @@ def inputs_to_codons(input):
     return transcribed_codons
 
 # Create datasets
-trainx = generate_dataset(100) # Training set 
-trainy = transcription_and_translation(trainx)
-testx = generate_dataset(30) # Testing set (for evaluation)
-testy = transcription_and_translation(testx)
+trainx = generate_codon_inputs(100) # Training set 
+trainy = transcription_and_translation_labels(trainx)
+testx = generate_codon_inputs(30) # Testing set (for evaluation)
+testy = transcription_and_translation_labels(testx)
 
 # View data size
 print("Training Dataset Size:", len(trainx))
@@ -168,7 +168,7 @@ print("\n\nSAMPLE PREDICTION")
 print("=================")
 
 codon = [[2, 1, 4]] # Get codon
-label = transcription_and_translation(codon) # Get label
+label = transcription_and_translation_labels(codon) # Get label
 print("\nCodon:", codon)
 
 prediction = model.predict(codon)
