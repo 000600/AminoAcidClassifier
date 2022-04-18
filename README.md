@@ -22,8 +22,9 @@ The data is generated within the python file (rather than being downloaded from 
       - AUG ==> Methionine
       - [1, 5, 3] ==> [0] 
 ####
-More information about how transcription and translation work can be found here: https://learn.genetics.utah.edu/content/basics/transcribe/. Since the dataset is generated within the file rather than being downloaded from a source, no data splitting is needed since the user can generate as many sets of codons and corresponding outputs as they please with the ==generate_dataset== function (which generates inputs) and the ==transcription_and_translation== function (which generates corresponding labels for the inputs of the ==generate_dataset== function. Note that the ==generate_dataset=== function takes a parameter ==
+Since the dataset is generated within the file rather than being downloaded from a source, no data splitting is needed since the user can generate as many sets of codons and corresponding outputs as they please for training and validation sets with the **generate_codon_inputs()** function (which generates inputs) and the **transcription_and_translation_labels()** function (which generates corresponding labels for the inputs of the **generate_codon_inputs()** function. Note that the**generate_codon_inputs()** function takes a parameter **num_sets**, which determines how many sets of 64 codons the neural network views if (for whatever reason) one wanted to generate more than on set. For example, the code **generate_codon_inputs(10)** will result in 10 sets of 64 codons and therefore 640 individual (though not unique since there are 10 sets) data points. The result of **generate_codon_inputs()** can be passed as a parameter into **transcription_and_translation_labels()** to generate labels for the sets of 64 unique codons.
 
+More information about how transcription and translation work can be found here: https://learn.genetics.utah.edu/content/basics/transcribe/.
 
 ## Libraries
 This neural network was created with the assistance of the Tensorflow library.
