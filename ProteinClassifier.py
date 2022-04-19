@@ -104,9 +104,9 @@ def inputs_to_codons(input):
     return transcribed_codons
 
 # Create datasets
-trainx = generate_codon_inputs(100) # Training set 
+trainx = generate_codon_inputs(1) # Training set 
 trainy = transcription_and_translation_labels(trainx)
-testx = generate_codon_inputs(30) # Testing set (for evaluation)
+testx = generate_codon_inputs(1) # Testing set (for evaluation)
 testy = transcription_and_translation_labels(testx)
 
 # View data size
